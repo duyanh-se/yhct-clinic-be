@@ -1,98 +1,405 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🏥 YHCT Clinic Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS + PostgreSQL + Prisma backend application for YHCT Clinic.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Tech Stack
 
-## Description
+- **Framework**: NestJS (Node.js)
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Auth**: JWT (Passport)
+- **API**: REST with Swagger
+- **Testing**: Jest
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Quick Start
 
-## Project setup
+### 1. Start Database (First Time)
 
 ```bash
-$ npm install
+# Start PostgreSQL container
+docker-compose up -d
+
+# Verify container is running
+docker ps
 ```
 
-## Compile and run the project
+### 2. Setup Backend
 
 ```bash
-# development
-$ npm run start
+# Install dependencies
+npm install
 
-# watch mode
-$ npm run start:dev
+# Setup environment
+cp .env.example .env
 
-# production mode
-$ npm run start:prod
+# Run migrations
+npx prisma migrate deploy
+
+# Seed data
+npx prisma db seed
 ```
 
-## Run tests
+### 3. Start Development
 
 ```bash
-# unit tests
-$ npm run test
+# Development server (watch mode)
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Backend will run at http://localhost:3000
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Daily Development
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Terminal 1: Start database
+docker-compose up -d
+
+# Terminal 2: Start backend
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### View Database
 
-## Resources
+```bash
+# GUI - Opens at http://localhost:5555
+npx prisma studio
 
-Check out a few resources that may come in handy when working with NestJS:
+# CLI
+docker exec -it yhct-clinic-db psql -U postgres -d yhct-clinic-db
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 📚 Project Structure
 
-## Support
+```
+src/
+├── auth/                    # Authentication module
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── jwt.strategy.ts
+│   ├── dto/                 # Data transfer objects
+│   │   ├── login.dto.ts
+│   │   ├── register.dto.ts
+│   │   └── register-staff.dto.ts
+│   └── interfaces/
+│       └── jwt-payload.interface.ts
+│
+├── common/                  # Shared utilities
+│   ├── decorators/
+│   │   └── roles.decorator.ts
+│   ├── guards/
+│   │   └── roles.guard.ts
+│   ├── enums/
+│   │   └── role.enum.ts
+│   └── interfaces/
+│       └── request-with-user.interface.ts
+│
+├── prisma/                  # Database service
+│   ├── prisma.module.ts
+│   └── prisma.service.ts
+│
+├── app.module.ts            # Root module
+├── app.service.ts
+├── app.controller.ts
+└── main.ts                  # Entry point
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🔧 Available Commands
 
-## Stay in touch
+### Development
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm run start              # Start normally
+npm run start:dev         # Watch mode (recommended)
+npm run start:debug       # Debug mode with breakpoints
+```
 
-## License
+### Building
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+npm run build             # Compile TypeScript
+npm run start:prod        # Run production build
+```
+
+### Testing
+
+```bash
+npm run test              # Unit tests
+npm run test:watch        # Watch mode
+npm run test:cov          # Coverage report
+npm run test:debug        # Debug tests
+npm run test:e2e          # End-to-end tests
+```
+
+### Code Quality
+
+```bash
+npm run lint              # Check code
+npm run format            # Format code (Prettier)
+```
+
+### Database
+
+```bash
+npx prisma migrate dev --name <name>     # Create migration
+npx prisma migrate deploy                # Run migrations
+npx prisma db seed                       # Seed data
+npx prisma studio                        # GUI viewer
+npx prisma generate                      # Update client
+```
+
+## 🐘 Database
+
+**PostgreSQL runs in Docker container: `yhct-clinic-db`**
+
+**Connection String:**
+
+```
+postgresql://postgres:postgres@localhost:5432/yhct-clinic-db
+```
+
+**View Data (GUI):**
+
+```bash
+npx prisma studio
+# Opens http://localhost:5555
+```
+
+**View Data (CLI):**
+
+```bash
+docker exec -it yhct-clinic-db psql -U postgres -d yhct-clinic-db
+
+# Useful SQL commands:
+\dt                    # List tables
+SELECT * FROM "User";  # Query data
+\q                     # Exit
+```
+
+**Docker Compose File:** `docker-compose.yml` (in this directory)
+
+## 🐘 Database Schema
+
+**Enums:**
+
+- `Role`: ADMIN, DOCTOR, NURSE, RECEPTIONIST, PATIENT
+- `Gender`: MALE, FEMALE, OTHER
+- `Department`: RECEPTION, CONSULTATION, PHARMACY, MANAGEMENT
+
+**Models:**
+
+- `User`: Core user info with email, role, credentials
+- `Employee`: Employee-specific data (fullName, department)
+- `Patient`: Patient-specific data
+
+See [prisma/schema.prisma](./prisma/schema.prisma) for full schema.
+
+## 📝 API Documentation
+
+Once backend is running, view Swagger API docs:
+
+```
+http://localhost:3000/api
+```
+
+## 🔄 Git Workflow
+
+### First Time Setup
+
+```bash
+# Configure git
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Start database
+docker-compose up -d
+
+# Install dependencies
+npm install
+
+# Setup database
+npx prisma migrate deploy
+npx prisma db seed
+```
+
+### Before Starting Development
+
+```bash
+# Get latest code
+git pull origin main
+
+# Install new dependencies if needed
+npm install
+
+# Start database
+docker-compose up -d
+
+# Run migrations if needed
+npx prisma migrate deploy
+```
+
+### While Developing
+
+```bash
+# Create feature branch
+git checkout -b feature/your-feature
+
+# Commit regularly
+git commit -m "feat: describe changes"
+
+# Push to remote
+git push origin feature/your-feature
+
+# Create Pull Request on GitHub
+```
+
+### Handling Migrations
+
+```bash
+# If you modified schema.prisma:
+npx prisma migrate dev --name describe_changes
+
+# If someone else created migrations:
+npx prisma migrate deploy
+```
+
+## 🐛 Troubleshooting
+
+### Database Connection Error
+
+```bash
+# Check Docker is running
+docker ps
+
+# Start container if not running
+docker-compose up -d
+
+# Check database health
+docker-compose logs postgres
+
+# Ensure .env has correct DATABASE_URL
+cat .env | grep DATABASE_URL
+```
+
+### Port 5432 Already in Use
+
+```bash
+# Stop and remove old container
+docker-compose down -v
+
+# Start fresh
+docker-compose up -d
+```
+
+### Port 3000 Already in Use
+
+```bash
+# Windows
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+
+# Mac/Linux
+lsof -ti:3000 | xargs kill -9
+```
+
+### Prisma Client Error
+
+```bash
+# Regenerate client
+npx prisma generate
+
+# Clear cache and reinstall
+rm -rf node_modules
+npm install
+npx prisma generate
+```
+
+### Migration Issues
+
+```bash
+# Check migration status
+npx prisma migrate status
+
+# Reset database (⚠️ DELETES ALL DATA)
+npx prisma migrate reset
+```
+
+### Docker Commands Reference
+
+```bash
+# Start container in background
+docker-compose up -d
+
+# Stop container (keep data)
+docker-compose stop
+
+# Start stopped container
+docker-compose start
+
+# Remove container (keep data)
+docker-compose down
+
+# Remove container and delete all data
+docker-compose down -v
+
+# View logs
+docker-compose logs postgres
+
+# Real-time logs
+docker-compose logs -f postgres
+
+# Check running containers
+docker ps
+
+# Execute SQL in container
+docker exec -it yhct-clinic-db psql -U postgres -d yhct-clinic-db
+```
+
+## 🔐 Security Best Practices
+
+- ✅ Never commit `.env` files (already in `.gitignore`)
+- ✅ Use `.env.example` as template for team
+- ✅ Change `JWT_SECRET` in production
+- ✅ Use strong `POSTGRES_PASSWORD` in production
+- ✅ Validate all user inputs (use DTOs)
+- ✅ Hash passwords with bcrypt (already implemented)
+- ✅ Implement rate limiting for API endpoints
+- ✅ Use HTTPS in production
+
+## 🚀 Deployment
+
+### Production Environment Variables
+
+Create `.env.production`:
+
+```bash
+NODE_ENV=production
+DATABASE_URL="your_production_db_url"
+JWT_SECRET="strong_secret_here"
+PORT=3000
+```
+
+### Build and Run
+
+```bash
+npm run build
+npm run start:prod
+```
+
+## 📖 Documentation
+
+- [NestJS Docs](https://docs.nestjs.com)
+- [Prisma Docs](https://www.prisma.io/docs)
+- [PostgreSQL Docs](https://www.postgresql.org/docs)
+- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
+
+## 💬 Support
+
+For issues and questions:
+
+1. Check troubleshooting section above
+2. Check NestJS/Prisma documentation
+3. Ask team lead or create an issue
+
+## 📄 License
+
+This project is proprietary software for YHCT Clinic.
