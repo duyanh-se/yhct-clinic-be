@@ -1,3 +1,8 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # compiled output
 /dist
 /node_modules
@@ -12,12 +17,25 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
 # OS
 .DS_Store
+Thumbs.db
 
 # Tests
 /coverage
 /.nyc_output
+
+# Prisma
+dev.db
+dev.db-shm
+dev.db-wal
 
 # IDEs and editors
 /.idea
